@@ -598,7 +598,9 @@
             
              $('.actual-choice-list').empty();
 
-            var all_checked = ($('#all_checked').val()!='') ? $('#all_checked').val().split(',') : [];
+            if($('#all_checked').length){
+              var all_checked = ($('#all_checked').val()!='') ? $('#all_checked').val().split(',') : [];
+            }
             
             var checked_tab_country = checked_tab_country.filter((v, i, a) => a.indexOf(v) === i); 
             for(var i in checked_tab_country) {
