@@ -1,15 +1,12 @@
 <?php
 	add_filter( 'wpcf7_load_css', '__return_false' );
-
 	function cookie_notice_front() {
 		wp_dequeue_style('cookie-notice-front');
 		wp_deregister_style('cookie-notice-front');
 	}
 	add_action('wp_print_styles', 'cookie_notice_front');
-
 	remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
 	remove_action( 'wp_print_styles', 'print_emoji_styles' ); 
-
 	function wpdocs_dequeue_dashicon() {
 		if (current_user_can( 'update_core' )) {
 		    return;
@@ -17,12 +14,10 @@
 		wp_deregister_style('dashicons');
 	}
 	add_action( 'wp_enqueue_scripts', 'wpdocs_dequeue_dashicon' );
-
 	function my_deregister_styles() { 
 	   wp_deregister_style( 'freshmail-style' );
 	}
 	add_action( 'wp_print_styles', 'my_deregister_styles', 100 );
-
 	register_nav_menus( array(
 		'primary' => __( 'Primary Menu', 'Primary Menu' ),
 		'footer_1' => __( 'Informacje ogólne', 'Informacje ogólne' ),
@@ -36,13 +31,10 @@
 		'footer_9' => __( 'Na skróty', 'Na skróty' ),
 		'trip_cats' => __( 'Trip categories', 'Trip categories' )
 	));
-
 	add_theme_support('post-thumbnails'); 
-
 	function page_bodyclass() {
 		global $wp_query;
 		$page = '';
-
 		if(is_front_page()) {
 	    	$page = 'home';
 		} elseif(is_page()) {
@@ -50,12 +42,10 @@
 		} elseif(is_category()) {
 			$page = get_category(get_query_var('cat'))->slug;
 		}
-
 		if($page) {
 			echo 'class= "'. $page. '"';
 		}
 	}
-
 	add_filter( 'template_include', 'var_template_include', 1000 );
 	function var_template_include( $t ){
            /* if(strpos($_SERVER["REQUEST_URI"], '/wakacje') !== false) {
@@ -66,7 +56,6 @@
 	    $GLOBALS['current_theme_template'] = basename($t);
 	    return $t;
 	}
-
 	function get_current_template( $echo = false ) {
 	    if( !isset( $GLOBALS['current_theme_template'] ) )
 	        return false;
@@ -75,17 +64,14 @@
 	    else
 	        return $GLOBALS['current_theme_template'];
 	}
-
 	function remove_menu_pages() {
 	    remove_menu_page('edit-comments.php'); // Komentarze
 	}
 	add_action( 'admin_menu', 'remove_menu_pages' );
-
 	add_action('after_setup_theme', 'wpdocs_theme_setup');
 	function wpdocs_theme_setup() {
                 add_image_size('large', get_option( 'large_size_w' ), get_option( 'large_size_h' ), true );
 	}
-
 	// if(class_exists('MultiPostThumbnails')) {
 	// 	for($i=1;$i<8;$i++) {
 	//         new MultiPostThumbnails(array(
@@ -96,9 +82,7 @@
 	//         );
 	// 	}
 	// }
-
 	// flush_rewrite_rules();
-
 	function main_slider() {
     	register_post_type('main_slider',
 	        array(
@@ -116,7 +100,6 @@
 	    );
 	}
 	add_action('init', 'main_slider');
-
 	function team() {
     	register_post_type('team',
 	        array(
@@ -133,7 +116,6 @@
 	    );
 	}
 	add_action('init', 'team');
-
 	function blog() {
     	register_post_type('blog',
 	        array(
@@ -150,14 +132,11 @@
 	    );
 	}
 	add_action('init', 'blog');
-
 	include_once('extensions/device_detect/mobble.php');
-
 	function remove_head_scripts() { 
 	   remove_action('wp_head', 'wp_print_scripts'); 
 	   remove_action('wp_head', 'wp_print_head_scripts', 9); 
 	   remove_action('wp_head', 'wp_enqueue_scripts', 1);
-
 	   remove_action( 'wp_head', 'rsd_link');
 	   remove_action( 'wp_head', 'wlwmanifest_link');
 	   remove_action( 'wp_head', 'wp_generator');
@@ -165,13 +144,11 @@
 	   remove_action( 'wp_head', 'index_rel_link');
 	   remove_action( 'wp_head', 'adjacent_posts_rel_link');
 	   remove_action( 'wp_head', 'wp_shortlink_wp_head');
-
 	   add_action('wp_footer', 'wp_print_scripts', 5);
 	   add_action('wp_footer', 'wp_enqueue_scripts', 5);
 	   add_action('wp_footer', 'wp_print_head_scripts', 5); 
 	} 
 	add_action( 'wp_enqueue_scripts', 'remove_head_scripts' );
-
 	function dimox_breadcrumbs() {
 		/* === OPTIONS === */
 		$text['home']     = 'Home'; // text for the 'Home' link
@@ -191,7 +168,6 @@
 		$before         = '<span class="current">'; // tag before the current crumb
 		$after          = '</span>'; // tag after the current crumb
 		/* === END OF OPTIONS === */
-
 		global $post;
 		$home_link      = home_url('/');
 		$link_before    = '<span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">';
@@ -304,7 +280,6 @@
         curl_setopt($ch, CURLOPT_POST,   1);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1 );
         curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
-
         $response = curl_exec($ch);
         curl_close($ch);
         return $response;
@@ -320,14 +295,12 @@
 	$xml->startDocument('1.0', 'UTF-8');
 			 
             $xml->startElement('mds');
-
                 $xml->startElement('auth');
                     $xml->writeElement('login', esc_attr( get_option('login')));
                     $xml->writeElement('pass', esc_attr( get_option('password')));
                     $xml->writeElement('source', 'mdsws');      
                     $xml->writeElement('srcDomain', 'citytravel.pl');
                 $xml->endElement();
-
                 $xml->startElement('request');
                     $xml->writeElement('type', $type);
                     if(!empty($selectAnswerFields)) {
@@ -339,7 +312,6 @@
                         }
                     $xml->endElement();	    
                 $xml->endElement();
-
             $xml->endElement();
 	$xml->endDocument();
         
@@ -350,7 +322,6 @@
             die('ERROR');
 			 
 	$xml_response = simplexml_load_string($xml_response_string);
-
 	$array = json_decode(json_encode((array) $xml_response));
         
         return $array;
@@ -367,7 +338,6 @@
         
         $login = esc_attr( get_option('login'));
         $password = esc_attr( get_option('password'));	
-
         $link = array('http://data2.merlinx.pl/index.php?login='.$login.'&password='.$password.'&htlCode='.$htlCode.'&tourOp='.$tourOp.'&season=S&htlCat=LAST',
                     'http://data2.merlinx.pl/index.php?login='.$login.'&password='.$password.'&htlCode='.$htlCode.'&tourOp='.$tourOp.'&season=W&htlCat=LAST',  
                     'http://data2.merlinx.pl/index.php?login='.$login.'&password='.$password.'&htlCode='.$htlCode.'&tourOp='.$tourOp.'&season=S',
@@ -386,15 +356,12 @@
                 $array = json_decode(json_encode((array) $xml_response));
                 if($array->status=='ok') {
                     $hotel = !is_object($array->hotelData->hotel) ? $array->hotelData->hotel : '';
-
                     $data = array('post_type' => 'hotels',
                             'post_name' => $htlXCode,
                             'post_content' => '',
                             'post_title' => $hotel,
                             'post_status' => 'publish');
-
                     $post_id = wp_insert_post($data);
-
                     $thumb = $array->hotelData->images->thumb;
                     $attachment = media_sideload_image($thumb, $post_id, '', 'id');
                     
@@ -417,13 +384,11 @@
                 
                 //jeśli nie ma żadnego obrazu, to go pobieramy z MerlinX
                 if(empty($media[$queried_post->ID])) {
-
                     foreach($link as $lnk) {
                         $xml_response = simplexml_load_file($lnk);
                         $array = json_decode(json_encode((array) $xml_response));
                         if($array->status=='ok') {
                             $hotel = $array->hotelData->hotel;
-
                             if(is_array($array->hotelData->images->pictures->picture)) $image = $array->hotelData->images->pictures->picture[0];
                             elseif(!empty($array->hotelData->images->pictures->picture)) $image = $array->hotelData->images->pictures->picture;
                             $i=0;
@@ -534,46 +499,32 @@
                     
                 return $images_list;
             }
-
             if($type=='text') {
                 $texts_list = array();
-
                 $kategoria_n = get_field('kategoria', $queried_post->ID);
                 if(!empty($kategoria_n)) $texts_list['kategoria'] = $kategoria_n;
-
                 $region_n = get_field('region', $queried_post->ID);
                 if(!empty($region_n)) $texts_list['region'] = $region_n;
-
                 $polozenie_n = get_field('polozenie', $queried_post->ID);
                 if(!empty($polozenie_n)) $texts_list['polozenie'] = $polozenie_n;
-
                 $plaza_n = get_field('plaza', $queried_post->ID);
                 if(!empty($plaza_n)) $texts_list['plaza'] = $plaza_n;
-
                 $wyposazenie_n = get_field('wyposazenie', $queried_post->ID);
                 if(!empty($wyposazenie_n)) $texts_list['wyposazenie'] = $wyposazenie_n;
-
                 $dostep_do_internetu_n = get_field('dostep_do_internetu', $queried_post->ID);
                 if(!empty($dostep_do_internetu_n)) $texts_list['dostep_do_internetu'] = $dostep_do_internetu_n;
-
                 $kategoria_lokalna_n = get_field('kategoria_lokalna', $queried_post->ID);
                 if(!empty($kategoria_lokalna_n)) $texts_list['kategoria_lokalna'] = $kategoria_lokalna_n;
-
                 $zakwaterowanie_n = get_field('zakwaterowanie', $queried_post->ID);
                 if(!empty($zakwaterowanie_n)) $texts_list['zakwaterowanie'] = $zakwaterowanie_n;
-
                 $wyzywienie_n = get_field('wyzywienie', $queried_post->ID);
                 if(!empty($wyzywienie_n)) $texts_list['wyzywienie'] = $wyzywienie_n;
-
                 $sport_n = get_field('sport', $queried_post->ID);
                 if(!empty($sport_n)) $texts_list['sport'] = $sport_n;
-
                 $restauracje_i_bary_n = get_field('restauracje_i_bary', $queried_post->ID);
                 if(!empty($restauracje_i_bary_n)) $texts_list['restauracje_i_bary'] = $restauracje_i_bary_n;
-
                 $dodatkowe_informacje_n = get_field('dodatkowe_informacje', $queried_post->ID);
                 if(!empty($dodatkowe_informacje_n)) $texts_list['dodatkowe_informacje'] = $dodatkowe_informacje_n;
-
                 $bagaz_n = get_field('bagaz', $queried_post->ID);
                 if(!empty($bagaz_n)) $texts_list['bagaz'] = $bagaz_n;
                 //}
@@ -671,7 +622,6 @@
     }
     
     add_action('parse_request', 'my_custom_url_handler');
-
     function my_custom_url_handler() {
        if(strpos($_SERVER["REQUEST_URI"], '/import_data') !== false) {
             //tutaj wykonujemy cały import
@@ -686,11 +636,9 @@
             exit;
        }
     }
-
     require_once 'import_mds.php';
     
     add_action('parse_request', 'my_obrazki_url_handler');
-
     function my_obrazki_url_handler() {
        if(strpos($_SERVER["REQUEST_URI"], '/obrazki') !== false) {
           global $wpdb;
@@ -734,7 +682,6 @@
             $login = esc_attr( get_option('login'));
             $password = esc_attr( get_option('password'));
             $post_id = $post->ID;
-
             $link[0] = 'http://data2.merlinx.pl/index.php?login='.$login.'&password='.$password.'&htlCode='.$htlCode.'&tourOp='.$tourOp.'&season=S&htlCat=LAST';
             $link[1] = 'http://data2.merlinx.pl/index.php?login='.$login.'&password='.$password.'&htlCode='.$htlCode.'&tourOp='.$tourOp.'&season=W&htlCat=LAST';   
             $link[2] = 'http://data2.merlinx.pl/index.php?login='.$login.'&password='.$password.'&htlCode='.$htlCode.'&tourOp='.$tourOp.'&season=S';
@@ -756,12 +703,10 @@
                                     }
                                 }
                             }
-
                             $my_post = array(
                                 'ID'           => $post_id,
                                 'post_content' => $new_text
                             );
-
                             wp_update_post( $my_post );
                             
                         }
@@ -787,7 +732,6 @@
     }
     
     add_action('parse_request', 'my_images_url_handler');
-
     function my_images_url_handler() {
        if(strpos($_SERVER["REQUEST_URI"], '/oimages') !== false) {
            global $wpdb;
@@ -809,7 +753,6 @@
         );
           
           $offers = get_data('groups', $conditions);
-
           foreach($offers->grp as $ofr) {*/
         
         $hotels = get_posts(array('post_type' => 'hotels', 'numberposts' => 100, 'date_query'    => array(
@@ -827,7 +770,6 @@
             $i=0;
             $login = esc_attr( get_option('login'));
             $password = esc_attr( get_option('password'));	
-
             $link[0] = 'http://data2.merlinx.pl/index.php?login='.$login.'&password='.$password.'&htlCode='.$htlCode.'&tourOp='.$tourOp.'&season=S&htlCat=LAST';
             $link[1] = 'http://data2.merlinx.pl/index.php?login='.$login.'&password='.$password.'&htlCode='.$htlCode.'&tourOp='.$tourOp.'&season=W&htlCat=LAST';   
             $link[2] = 'http://data2.merlinx.pl/index.php?login='.$login.'&password='.$password.'&htlCode='.$htlCode.'&tourOp='.$tourOp.'&season=S';
@@ -837,7 +779,6 @@
             
             echo "<pre>";
             print_r($link);
-
             /*foreach($link as $lnk) {
                 $xml_response = simplexml_load_file($lnk);
                 $array = json_decode(json_encode((array) $xml_response));
@@ -883,7 +824,6 @@
                                 'ID'           => $post_id,
                                 'post_content' => $new_text
                             );
-
                             echo $post_id."<br/>";
                             wp_update_post( $my_post );
                             
@@ -924,7 +864,6 @@
     
     /*
      add_action('parse_request', 'my_skrypt_url_handler');
-
     function my_skrypt_url_handler() {
        if(strpos($_SERVER["REQUEST_URI"], '/skrypt') !== false) {
            global $wpdb;
@@ -1018,7 +957,6 @@
                                 'post_content' => $res->body,
                                 'post_title' => $res->title,
                                 'post_status' => 'publish');
-
             $post_id = wp_insert_post($data);
                 }
                 elseif(!empty($queried_post->ID) && !empty($res->body)) {
@@ -1026,7 +964,6 @@
                         'ID'           => $queried_post->ID,
                         'post_content' => $res->body
                     );
-
                     echo wp_update_post( $my_post );
                 }
           /*  update_field('kategoria', $kategoria, $post_id);   
@@ -1079,7 +1016,6 @@
             }
         }
         }
-
         $par_adt = get_field('par_adt', $trip_id);
         if(empty($par_adt)) $par_adt = 2;
         $trp_duration = get_field('trp_duration', $trip_id);
@@ -1189,13 +1125,11 @@
         
         //echo "<pre>";
         //print_r($conditions);exit;
-
         if($only_conditions === true) return $conditions;
        // print_r($conditions);
         $data = get_data('groups', $conditions);
      //   echo "<pre>";
       //  print_r($data);exit;
-
         return $data;
     }
     
@@ -1224,6 +1158,9 @@
         $vars[] = "minPrice";
         $vars[] = "maxPrice";
         $vars[] = "obj_type";
+        $vars[] = "cities_names";
+        $vars[] = "hotels_names";
+        $vars[] = "advanced";
         return $vars;
     }
     add_filter( 'query_vars', 'add_query_vars_filter' );
@@ -1248,7 +1185,6 @@
         
         add_action('wp_ajax_schowek', 'process_schowek');
         add_action('wp_ajax_nopriv_schowek', 'process_schowek');
-
 	function process_schowek() {
             global $wpdb;
             
@@ -1266,7 +1202,6 @@
                     ) 
                 );
             }
-
             $qry_sel = "SELECT id FROM wp_hanging 
                     WHERE code='{$hanging_code}'";
             $row = $wpdb->get_row( $qry_sel );
@@ -1291,7 +1226,6 @@
         
         add_action('wp_ajax_schowek_remove', 'process_schowek_remove');
         add_action('wp_ajax_nopriv_schowek_remove', 'process_schowek_remove');
-
 	function process_schowek_remove() {
             global $wpdb;
             
@@ -1300,14 +1234,12 @@
                 echo 0;
                 exit;
             }
-
             $qry_sel = "SELECT id FROM wp_hanging 
                     WHERE code='{$hanging_code}'";
             $row = $wpdb->get_row( $qry_sel );
             $hanging_id = $row->id;
             
             echo $wpdb->delete( 'wp_hanging_offers', array( 'hanging_id' => $hanging_id, 'offer_id' => $_POST['id']), array( '%d', '%d' ) );
-
             exit;
 	}
         
@@ -1340,7 +1272,6 @@
         
     add_action('wp_ajax_change_offer', 'process_change_offer');
     add_action('wp_ajax_nopriv_change_offer', 'process_change_offer');
-
     function process_change_offer() {
         $values = array();
         parse_str($_POST['form'], $values);
@@ -1487,14 +1418,10 @@
     }
   }
 }
-
 add_image_size('medium', get_option( 'medium_size_w' ), get_option( 'medium_size_h' ), true );
-
 require_once 'reservations.php';
-
 add_action('wp_ajax_load_images', 'process_load_images');
 add_action('wp_ajax_nopriv_load_images', 'process_load_images');
-
 function process_load_images() {
     $htlCode = $_POST['htlCode'];
     $htlXCode = $_POST['htlXCode'];
@@ -1507,7 +1434,6 @@ function process_load_images() {
         
     $login = esc_attr( get_option('login'));
     $password = esc_attr( get_option('password'));	
-
     $link = array('http://data2.merlinx.pl/index.php?login='.$login.'&password='.$password.'&htlCode='.$htlCode.'&tourOp='.$tourOp.'&season=S&htlCat=LAST',
                 'http://data2.merlinx.pl/index.php?login='.$login.'&password='.$password.'&htlCode='.$htlCode.'&tourOp='.$tourOp.'&season=W&htlCat=LAST',  
                 'http://data2.merlinx.pl/index.php?login='.$login.'&password='.$password.'&htlCode='.$htlCode.'&tourOp='.$tourOp.'&season=S',
@@ -1517,7 +1443,6 @@ function process_load_images() {
    
     $queried_post = get_page_by_path($htlXCode,OBJECT,'hotels');
     $post_id = (int) $queried_post->ID;
-
     $images_list = array();
     for($x=1;$x<=30;$x++) {
         $image = get_field('zdjecie'.$x, $queried_post->ID);
@@ -1568,7 +1493,6 @@ function process_load_images() {
     echo json_encode($images_list);
     exit;
 }
-
 function my_login_redirect( $redirect_to, $request, $user ) {
     if (isset($user->roles) && is_array($user->roles)) {
         //check for subscribers
@@ -1577,14 +1501,10 @@ function my_login_redirect( $redirect_to, $request, $user ) {
             $redirect_to =  home_url().'/wp-admin/edit.php?post_type=reservations';
         }
     }
-
     return $redirect_to;
 }
-
 add_filter( 'login_redirect', 'my_login_redirect', 10, 3 );
-
 function my_save_region( $post_id ) {
-
 	if ( wp_is_post_revision( $post_id ) ) {
 		return;
         }
@@ -1596,14 +1516,12 @@ function my_save_region( $post_id ) {
             $wyszukiwanie = (int)get_field('field_5acbde2e0bac3', $post_id);
             $kod_mds = get_field('field_5a99ed683cb05', $post_id);
             $active = (int)get_field('field_5aa4658340313', $post_id);
-
             $wpdb->update('wp_regions', array('home' => $wyszukiwanie, 'active' => $active), array('kod_mds' => $kod_mds), 
                                 array('%d', '%d'), array('%s') );
     
         }
 }
 add_action( 'save_post', 'my_save_region' );
-
 function my_save_country($term_id, $tt_id, $taxonomy) {
    $term = get_term($term_id, $taxonomy);
    if($term->taxonomy == 'regions_countries') {
@@ -1618,10 +1536,7 @@ function my_save_country($term_id, $tt_id, $taxonomy) {
    }
 }
 add_action( 'edit_term', 'my_save_country', 10, 3 );
-
-
 add_action('parse_request', 'my_miasta_url_handler');
-
 function my_miasta_url_handler() {
    if(strpos($_SERVER["REQUEST_URI"], '/miasta') !== false) {
        $tourOp = array();                            
@@ -1631,7 +1546,6 @@ function my_miasta_url_handler() {
                 $tourOp[] = strtoupper($dt->slug);
             }
         }
-
         $cities = array();
         
         global $wpdb;
@@ -1639,13 +1553,12 @@ function my_miasta_url_handler() {
         $results = $wpdb->get_results( $qry );
         foreach($results as $res) {
             $cities[$res->id] = array();
-            $offers = get_data('offers', array('trp_destination'=>$res->kod_mds, 'calc_found' => 1000, 'limit_count' => 1000, 'ofr_tourOp' => join(',', $tourOp)));
-            if(!empty($offers->ofr)) {
-                foreach($offers->ofr as $ofr) {
-                    $cities[$res->id][] = $ofr->obj->{'@attributes'}->city;
+            $offers = get_data('groups', array('trp_destination'=>$res->kod_mds, 'calc_found' => 1000, 'limit_count' => 1000, 'ofr_tourOp' => join(',', $tourOp)));
+            if(!empty($offers->grp)) {
+                foreach($offers->grp as $ofr) {
+                    $cities[$res->id][] = $ofr->ofr->obj->{'@attributes'}->city;
                 }
             }
-            
             $cities[$res->id] = array_unique($cities[$res->id]);     
         }
         
@@ -1675,11 +1588,8 @@ function my_miasta_url_handler() {
         exit;
     }
 }
-
-
 add_action('wp_ajax_get_region', 'process_get_region');
 add_action('wp_ajax_nopriv_get_region', 'process_get_region');
-
 function process_get_region() {
     global $wpdb;
     $qry = "SELECT `parent_kod_mds` FROM `wp_cities` WHERE id = '".$_POST['data_id']."' AND active=1";
@@ -1689,10 +1599,8 @@ function process_get_region() {
     $region_name = $wpdb->get_var($qry2);
     echo $region_name;exit;
 }
-
 add_action('wp_ajax_get_country', 'process_get_country');
 add_action('wp_ajax_nopriv_get_country', 'process_get_country');
-
 function process_get_country() {
     global $wpdb;
     if($_POST['data_type']=='city') {
@@ -1708,10 +1616,8 @@ function process_get_country() {
     $country_kod = $wpdb->get_var($qry3);
     echo $country_kod;exit;
 }
-
 add_action('wp_ajax_get_cities', 'process_get_cities');
 add_action('wp_ajax_nopriv_get_cities', 'process_get_cities');
-
 function process_get_cities() {
     global $wpdb;
     $list = explode(',', $_POST['list']);
@@ -1735,9 +1641,7 @@ function process_get_cities() {
                 if(!empty($reg->name)) {
                     $reg_checked = (in_array($reg->kod_mds, $regions_checked)) ? ' checked' : '';
                     echo '<ul class="ul-regions"><li><label><input class="region" type="checkbox" value="'.$reg->kod_mds.'" data-region-name="'.$reg->name.'" data-region-id="'.$reg->kod_mds.'"'.$reg_checked.'> '.$reg->name.'</label> ';
-
                     $qry3 = "SELECT `id`, `name` FROM `wp_cities` WHERE name<>'".$reg->name."' AND parent_id<>0 AND parent_kod_mds = '".$reg->kod_mds."' AND active=1";
-
                     $cities = $wpdb->get_results($qry3);
                     if(!empty($cities)) {
                         ?>
@@ -1803,14 +1707,12 @@ function process_get_cities() {
                         checked_tab_region.push($(this).val());
                     } 
                 });    
-
                 var checked_tab_city = [];
                 $.each($('.city'), function() {
                     if($(this).is(':checked')) {
                         checked_tab_city.push($(this).val());
                     } 
                 });   
-
                 var checked_tab_region = checked_tab_region.filter((v, i, a) => a.indexOf(v) === i); 
                 for(var i in checked_tab_region) {
                     var country_name = $('input.region[value=\"'+checked_tab_region[i]+'\"]').attr('data-region-name');
@@ -1818,9 +1720,7 @@ function process_get_cities() {
                     if(country_name!='' && data_id==undefined)
                         $('.actual-choice-list').append('<li><span class=\"del-item\" data-type=\"region\" data-name=\"'+country_name+'\" data-id=\"'+checked_tab_region[i]+'\">'+country_name+' <span class=\"icon-delete\"></span></span></li>').show();               
                     if(all_checked.length>8) $('.actual-choice-list').append('<li class=\"kropki\"><span class=\"del-item\"><b>...</b></span></li>');
-
                 }
-
                 var checked_tab_city = checked_tab_city.filter((v, i, a) => a.indexOf(v) === i); 
                 for(var i in checked_tab_city) {
                     var country_name = $('input.city[data-city-id=\"'+checked_tab_city[i]+'\"]').attr('data-city-name');
@@ -1828,16 +1728,13 @@ function process_get_cities() {
                     if(country_name!='' && data_id==undefined)
                         $('.actual-choice-list').append('<li><span class=\"del-item\" data-type=\"city\" data-name=\"'+country_name+'\" data-id=\"'+checked_tab_city[i]+'\">'+country_name+' <span class=\"icon-delete\"></span></span></li>').show();               
                     if(all_checked.length>8) $('.actual-choice-list').append('<li class=\"kropki\"><span class=\"del-item\"><b>...</b></span></li>');
-
                 }
             });
         </script>";
     exit;
 }
-
 add_action('wp_ajax_search_in_all', 'process_search_in_all');
 add_action('wp_ajax_nopriv_search_in_all', 'process_search_in_all');
-
 function process_search_in_all() {
     global $wpdb;
     $search = $_POST['val'];
@@ -1880,10 +1777,8 @@ function process_search_in_all() {
     echo $kraje.$regiony.$miasta;
     exit;
 }
-
 add_action('wp_ajax_search_hotel', 'process_search_hotel');
 add_action('wp_ajax_nopriv_search_hotel', 'process_search_hotel');
-
 function process_search_hotel() {
     global $wpdb;
     $search = $_POST['val'];
@@ -1906,4 +1801,4 @@ function process_search_hotel() {
     
     echo $hotele;
     exit;
-}       
+}
