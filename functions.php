@@ -1675,3 +1675,235 @@ function my_miasta_url_handler() {
         exit;
     }
 }
+
+
+add_action('wp_ajax_get_region', 'process_get_region');
+add_action('wp_ajax_nopriv_get_region', 'process_get_region');
+
+function process_get_region() {
+    global $wpdb;
+    $qry = "SELECT `parent_kod_mds` FROM `wp_cities` WHERE id = '".$_POST['data_id']."' AND active=1";
+    $region_id = $wpdb->get_var($qry);
+    
+    $qry2 = "SELECT `name` FROM `wp_regions` WHERE kod_mds = '".$region_id."' AND active=1";
+    $region_name = $wpdb->get_var($qry2);
+    echo $region_name;exit;
+}
+
+add_action('wp_ajax_get_country', 'process_get_country');
+add_action('wp_ajax_nopriv_get_country', 'process_get_country');
+
+function process_get_country() {
+    global $wpdb;
+    if($_POST['data_type']=='city') {
+        $qry = "SELECT `parent_kod_mds` FROM `wp_cities` WHERE id = '".$_POST['data_id']."' AND active=1";
+        $region_id = $wpdb->get_var($qry);
+    }
+    else $region_id = $_POST['data_id'];
+    
+    $qry2 = "SELECT `parent` FROM `wp_regions` WHERE kod_mds = '".$region_id."' AND active=1";
+    $country_id = $wpdb->get_var($qry2);
+    
+    $qry3 = "SELECT `kod_mds` FROM `wp_regions` WHERE id = '".$country_id."' AND active=1";
+    $country_kod = $wpdb->get_var($qry3);
+    echo $country_kod;exit;
+}
+
+add_action('wp_ajax_get_cities', 'process_get_cities');
+add_action('wp_ajax_nopriv_get_cities', 'process_get_cities');
+
+function process_get_cities() {
+    global $wpdb;
+    $list = explode(',', $_POST['list']);
+    $list = array_unique($list);
+    
+    $regions_checked = explode(',', $_POST['regions_checked']);
+    $regions_checked = array_unique($regions_checked);
+    
+    $cities_checked = explode(',', $_POST['cities_checked']);
+    $cities_checked = array_unique($cities_checked);
+    
+    foreach($list as $ll) {
+        $qry = "SELECT `id`, `name` FROM `wp_regions` WHERE kod_mds = '".$ll."' AND active=1";
+        $country = $wpdb->get_row($qry);
+    
+        $qry2 = "SELECT `id`, `name`, `kod_mds` FROM `wp_regions` WHERE parent<>0 AND parent = '".$country->id."' AND active=1";
+        $regions = $wpdb->get_results($qry2);
+        if(!empty($regions)) {
+            echo '<li class="area"> '.$country->name.'<span class="txt">regiony</span>';
+            foreach($regions as $reg) {
+                if(!empty($reg->name)) {
+                    $reg_checked = (in_array($reg->kod_mds, $regions_checked)) ? ' checked' : '';
+                    echo '<ul class="ul-regions"><li><label><input class="region" type="checkbox" value="'.$reg->kod_mds.'" data-region-name="'.$reg->name.'" data-region-id="'.$reg->kod_mds.'"'.$reg_checked.'> '.$reg->name.'</label> ';
+
+                    $qry3 = "SELECT `id`, `name` FROM `wp_cities` WHERE name<>'".$reg->name."' AND parent_id<>0 AND parent_kod_mds = '".$reg->kod_mds."' AND active=1";
+
+                    $cities = $wpdb->get_results($qry3);
+                    if(!empty($cities)) {
+                        ?>
+                        <span class="txt">miasta</span>
+                        <ul class="ul-cities">
+                        <?php
+                        foreach($cities as $city) {
+                            if(!empty($city->name)) {
+                                $ct_checked = (in_array($city->name, $cities_checked)) ? ' checked' : '';
+                                echo '<li><label><input class="city" type="checkbox" value="'.$city->id.'" data-city-name="'.$city->name.'" data-city-id="'.$city->id.'"'.$ct_checked.'> '.$city->name.'</label>';
+                            }
+                        }
+                        ?>
+                        </ul>
+                        <?php
+                    }   
+                    echo '</li></ul>';
+                }
+            }
+            echo '</li>';
+        }   
+    }    
+    echo "<script>
+        $('input.region').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                increaseArea: '20%',
+        });
+        $('input.city').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                increaseArea: '20%',
+        });
+        $('.country, .region, .city').on('ifUnchecked', function() {
+            $('.del-item[data-id=\"'+$(this).val()+'\"]').parent().remove();
+            if($(this).hasClass('country')) {
+                name = $(this).attr('data-country-name');
+            }
+            else if($(this).hasClass('region')) {
+                name = $(this).attr('data-region-name');
+            }
+            else if($(this).hasClass('city')) {
+                name = $(this).attr('data-city-name');
+            }
+            $('.del-item[data-name=\"'+name+'\"]').parent().remove();
+            var all_checked = $('#all_checked').val().split(',');
+            all_checked = all_checked.filter(function(e) { return e !== name })
+            $('#all_checked').val(all_checked.join(','));
+            if($('.actual-choice-list').html()=='') $('.actual-choice-list').hide();
+      });
+      
+    jQuery(document).ready(function() {
+                
+                var all_checked = jQuery('#all_checked').val().split(',');
+                for(var i in all_checked) {
+                    if(all_checked[i]!='') {
+                        $('input.region[data-region-name=\"'+all_checked[i]+'\"]').iCheck('check'); 
+                        $('input.city[data-city-name=\"'+all_checked[i]+'\"]').iCheck('check'); 
+                        }   
+                }
+                
+            var checked_tab_region = [];
+                $.each($('.region'), function() {
+                    if($(this).is(':checked')) {
+                        checked_tab_region.push($(this).val());
+                    } 
+                });    
+
+                var checked_tab_city = [];
+                $.each($('.city'), function() {
+                    if($(this).is(':checked')) {
+                        checked_tab_city.push($(this).val());
+                    } 
+                });   
+
+                var checked_tab_region = checked_tab_region.filter((v, i, a) => a.indexOf(v) === i); 
+                for(var i in checked_tab_region) {
+                    var country_name = $('input.region[value=\"'+checked_tab_region[i]+'\"]').attr('data-region-name');
+                    var data_id = $('.actual-choice-list').find('span.del-item[data-id=\"'+checked_tab_region[i]+'\"]').attr('data-id');
+                    if(country_name!='' && data_id==undefined)
+                        $('.actual-choice-list').append('<li><span class=\"del-item\" data-type=\"region\" data-name=\"'+country_name+'\" data-id=\"'+checked_tab_region[i]+'\">'+country_name+' <span class=\"icon-delete\"></span></span></li>').show();               
+                    if(all_checked.length>8) $('.actual-choice-list').append('<li class=\"kropki\"><span class=\"del-item\"><b>...</b></span></li>');
+
+                }
+
+                var checked_tab_city = checked_tab_city.filter((v, i, a) => a.indexOf(v) === i); 
+                for(var i in checked_tab_city) {
+                    var country_name = $('input.city[data-city-id=\"'+checked_tab_city[i]+'\"]').attr('data-city-name');
+                    var data_id = $('.actual-choice-list').find('span.del-item[data-name=\"'+country_name+'\"]').attr('data-id');
+                    if(country_name!='' && data_id==undefined)
+                        $('.actual-choice-list').append('<li><span class=\"del-item\" data-type=\"city\" data-name=\"'+country_name+'\" data-id=\"'+checked_tab_city[i]+'\">'+country_name+' <span class=\"icon-delete\"></span></span></li>').show();               
+                    if(all_checked.length>8) $('.actual-choice-list').append('<li class=\"kropki\"><span class=\"del-item\"><b>...</b></span></li>');
+
+                }
+            });
+        </script>";
+    exit;
+}
+
+add_action('wp_ajax_search_in_all', 'process_search_in_all');
+add_action('wp_ajax_nopriv_search_in_all', 'process_search_in_all');
+
+function process_search_in_all() {
+    global $wpdb;
+    $search = $_POST['val'];
+    
+    $kraje = $regiony = $miasta = "";
+    
+    $qry = "SELECT `kod_mds`, `name` FROM `wp_regions` WHERE name LIKE '%".$search."%' AND active = 1 AND parent = 0 GROUP BY `name`";
+    $countries = $wpdb->get_results($qry);
+        
+    if(!empty($countries)) {
+        $kraje .= "<ul><legend>Kraje</legend>";
+        foreach($countries as $count) {
+            $kraje .= "<li class='search_item' data-type='country' data-name='".$count->name."' data-id='".$count->kod_mds."'>".$count->name."</li>";
+        }
+        $kraje .= "</ul>";
+    }
+    
+    $qry = "SELECT `kod_mds`, `name` FROM `wp_regions` WHERE name LIKE '%".$search."%' AND active=1 AND parent<>0 GROUP BY `name`";
+    $regions = $wpdb->get_results($qry);
+    
+    if(!empty($regions)) {
+        $regiony .= "<ul><legend>Regiony</legend>";
+        foreach($regions as $count) {
+            $regiony .= "<li class='search_item' data-type='region' data-name='".$count->name."' data-id='".$count->kod_mds."'>".$count->name."</a></li>";
+        }
+        $regiony .= "</ul>";
+    }
+    
+    $qry = "SELECT `id`, `name` FROM `wp_cities` WHERE name LIKE '%".$search."%' AND active=1 AND parent_id<>0 GROUP BY `name`";
+    $cities = $wpdb->get_results($qry);
+    
+    if(!empty($cities)) {
+        $miasta .= "<ul><legend>Miasta</legend>";
+        foreach($cities as $count) {
+            $miasta .= "<li class='search_item' data-type='city' data-name='".$count->name."' data-id='".$count->id."'>".$count->name."</a></li>";
+        }
+        $miasta .= "</ul>";
+    }
+    
+    echo $kraje.$regiony.$miasta;
+    exit;
+}
+
+add_action('wp_ajax_search_hotel', 'process_search_hotel');
+add_action('wp_ajax_nopriv_search_hotel', 'process_search_hotel');
+
+function process_search_hotel() {
+    global $wpdb;
+    $search = $_POST['val'];
+    
+    $hotele = "";
+    
+    $args = array(
+	'posts_per_page'   => 50,
+	'post_type'        => 'hotels',
+        's' => $search
+    );
+    $hotels = get_posts( $args );
+    
+    if(!empty($hotels)) {
+        $hotele .= "<legend>Hotele</legend>";
+        foreach($hotels as $hotel) {
+            $hotele .= "<li class='search_item' data-type='hotel' data-name='".$hotel->post_title."'>".$hotel->post_title."</li>";
+        }
+    }
+    
+    echo $hotele;
+    exit;
+}       
