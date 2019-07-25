@@ -591,7 +591,7 @@
                 } 
             });    
             
-            if(jQuery('#regions').length()){
+            if($('#regions').length){
               var regions_checked = jQuery('#regions').val().split(',');            
               get_cities(checked_tab_country, regions_checked);    
             }
