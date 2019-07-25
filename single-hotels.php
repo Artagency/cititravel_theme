@@ -66,6 +66,8 @@ foreach($terms as $term) {
     $services_names[$code] = $term->name;
 }
 
+$conditions['par_adt'] = (int)$par_adt;
+if($par_chd>0) $conditions['par_chd'] = (int)$par_chd;
 $data2 = get_data('offers', $conditions);
 
 $maxAdults = $maxPax = array();
@@ -607,7 +609,7 @@ $sum = $ofr->{'@attributes'}->price*(int)get_query_var('par_adt', 2) + $ofr->{'@
 								<span class="search-panel-span-small">Cena całkowita (za <?=$par_adt+$par_chd;?> osoby):</span>
 							</div>
 							<div class="col-lg-4 col-md-12">
-								<span class="search-panel-span-small"><?=$data_price->ofr->{'@attributes'}->price;?> <?=$ofr->{'@attributes'}->curr;?></span>
+								<span class="search-panel-span-small"><?=($par_adt+$par_chd>1&&$data_price->ofr->{'@attributes'}->price!=$ofr->{'@attributes'}->price)?$data_price->ofr->{'@attributes'}->price:($par_adt+$par_chd)*$ofr->{'@attributes'}->price;?> <?=$ofr->{'@attributes'}->curr;?></span>
 							</div>
 						</div>
 					</div>
