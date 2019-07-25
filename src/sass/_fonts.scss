@@ -1,0 +1,178 @@
+// @import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700&subset=latin-ext');
+
+@font-face {
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?7iy7uo');
+  src:  url('fonts/icomoon.eot?7iy7uo#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?7iy7uo') format('truetype'),
+    url('fonts/icomoon.woff?7iy7uo') format('woff'),
+    url('fonts/icomoon.svg?7iy7uo#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-like:before {
+  content: "\e90c";
+}
+.icon-call:before {
+  content: "\e908";
+}
+.icon-email:before {
+  content: "\e909";
+}
+.icon-island-with-palm-trees:before {
+  content: "\e932";
+}
+.icon-bbq:before {
+  content: "\e92e";
+}
+.icon-golf-ball-with-dents:before {
+  content: "\e92f";
+}
+.icon-horse-riding:before {
+  content: "\e930";
+}
+.icon-house:before {
+  content: "\e931";
+}
+.icon-kindergarden:before {
+  content: "\e929";
+}
+.icon-sailboat:before {
+  content: "\e92a";
+}
+.icon-slide:before {
+  content: "\e92b";
+}
+.icon-sun-umbrella:before {
+  content: "\e92c";
+}
+.icon-trekking:before {
+  content: "\e92d";
+}
+.icon-disability:before {
+  content: "\e926";
+}
+.icon-hotel2:before {
+  content: "\e927";
+}
+.icon-washer-machine:before {
+  content: "\e928";
+}
+.icon-adult-avatar:before {
+  content: "\e91e";
+}
+.icon-commerce-and-shopping:before {
+  content: "\e91f";
+}
+.icon-parking-sign:before {
+  content: "\e920";
+}
+.icon-party-dj:before {
+  content: "\e923";
+}
+.icon-snorkel:before {
+  content: "\e924";
+}
+.icon-surfer-surfing-in-a-big-water-wave:before {
+  content: "\e925";
+}
+.icon-internet:before {
+  content: "\e91d";
+}
+.icon-golfer:before {
+  content: "\e91c";
+}
+.icon-swimmer:before {
+  content: "\e921";
+}
+.icon-tennis-raquet-and-ball:before {
+  content: "\e922";
+}
+.icon-aircondition:before {
+  content: "\e910";
+}
+.icon-airport:before {
+  content: "\e911";
+}
+.icon-bicycle:before {
+  content: "\e912";
+}
+.icon-family:before {
+  content: "\e913";
+}
+.icon-hotel:before {
+  content: "\e914";
+}
+.icon-passport:before {
+  content: "\e915";
+}
+.icon-spa:before {
+  content: "\e916";
+}
+.icon-stretching-exercises:before {
+  content: "\e917";
+}
+.icon-swimming-pool-opened-under-sunlight:before {
+  content: "\e918";
+}
+.icon-wifi-connection-signal-symbol:before {
+  content: "\e919";
+}
+.icon-windsurf:before {
+  content: "\e91a";
+}
+.icon-woman:before {
+  content: "\e91b";
+}
+.icon-star-half:before {
+  content: "\e90f";
+}
+.icon-arrow-left:before {
+  content: "\e907";
+}
+.icon-arrow-right:before {
+  content: "\e90a";
+}
+.icon-star-normal:before {
+  content: "\e90e";
+}
+.icon-star:before {
+  content: "\e90b";
+}
+.icon-facebook:before {
+  content: "\e903";
+}
+.icon-googleplus:before {
+  content: "\e904";
+}
+.icon-linkedin:before {
+  content: "\e905";
+}
+.icon-twitter:before {
+  content: "\e906";
+}
+.icon-menu:before {
+  content: "\e902";
+}
+.icon-delete:before {
+  content: "\e900";
+}
+.icon-arrow:before {
+  content: "\e901";
+}

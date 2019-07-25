@@ -1,0 +1,77 @@
+/* ------------------------------------------ *\
+				VARIABLES
+\* ------------------------------------------ */
+
+$base-font-size: 1.4rem;
+
+$black: #000;
+$white: #FFF;
+
+$font-family-regular: 'Montserrat';
+
+$icomoon: 'icomoon';
+
+$color-main: #656565;
+$color-accent: #f15a22; // orange
+$color-accent2: #b93808; // dark orange
+$color-accent3: #48c0f9; // blue
+$color-accent4: #263e72; // dark blue
+
+
+/* ------------------------------------------ *\
+				 MIXINS
+\* ------------------------------------------ */
+
+@mixin hidden(){
+	visibility: hidden;
+	opacity: 0;
+}
+
+@mixin visible(){
+	visibility: visible;
+	opacity: 1;
+}
+
+@mixin clearfix() {
+  	&:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
+@-webkit-keyframes animateArrowBottom {
+  0% { transform: translate(0,-5px); }
+  50% { transform: translate(0,5px); }
+  100% { transform: translate(0,-5px); }
+}
+
+@keyframes animateArrowBottom {
+  0% { transform: translate(0,-5px); }
+  50% { transform: translate(0,5px); }
+  100% { transform: translate(0,-5px); }
+}
+
+@keyframes BannerFadeIn {
+    0% { opacity: 0; }
+    50% {  opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@-webkit-keyframes BannerFadeIn {
+    0% { opacity: 0; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes blurFadeInBannerCaption {
+  0% { opacity: 0; transform: translateY(-50px); }
+  100% { opacity: 1; transform: translateY(0);; }
+}
+
+@keyframes blurFadeInBannerCaptionSec {
+  0% { opacity: 0; transform: translateY(-30px); }
+  100% { opacity: 1; transform: translateY(0);; }
+}
+
+%hide-text { text-indent: -100em; white-space: nowrap; overflow: hidden; }
