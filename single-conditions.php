@@ -314,7 +314,7 @@ else $string_param = '?';
                                                     <i class="icon-star<?=($cat >= 40)?'':'-normal';?>"></i>
                                                     <i class="icon-star<?=($cat >= 50)?'':'-normal';?>"></i>
                                                 </span>
-                                                <span class="region"><?=$arr->obj->{'@attributes'}->country;?>, <?=$arr->obj->{'@attributes'}->region;?></span>
+                                                <span class="region"><?=$arr->obj->{'@attributes'}->country;?>, <?=$arr->obj->{'@attributes'}->city;?></span>
                                             </div>
 
                                             <div class="offer-trip-details">
