@@ -1741,7 +1741,7 @@ function process_search_in_all() {
     
     $kraje = $regiony = $miasta = "";
     
-    $qry = "SELECT `kod_mds`, `name` FROM `wp_regions` WHERE name LIKE '%".$search."%' AND active = 1 AND parent = 0 GROUP BY `name`";
+    $qry = "SELECT `kod_mds`, `name` FROM `wp_regions` WHERE name LIKE '%".$search."%' AND active = 1 AND home=1 AND parent = 0 GROUP BY `name`";
     $countries = $wpdb->get_results($qry);
         
     if(!empty($countries)) {
@@ -1752,7 +1752,7 @@ function process_search_in_all() {
         $kraje .= "</ul>";
     }
     
-    $qry = "SELECT `kod_mds`, `name` FROM `wp_regions` WHERE name LIKE '%".$search."%' AND active=1 AND parent<>0 GROUP BY `name`";
+    $qry = "SELECT `kod_mds`, `name` FROM `wp_regions` WHERE name LIKE '%".$search."%' AND active=1 AND home=1 AND parent<>0 GROUP BY `name`";
     $regions = $wpdb->get_results($qry);
     
     if(!empty($regions)) {
