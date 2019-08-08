@@ -1595,7 +1595,7 @@ function process_get_region() {
     $qry = "SELECT `parent_kod_mds` FROM `wp_cities` WHERE id = '".$_POST['data_id']."' AND active=1";
     $region_id = $wpdb->get_var($qry);
     
-    $qry2 = "SELECT `name` FROM `wp_regions` WHERE kod_mds = '".$region_id."' AND active=1";
+    $qry2 = "SELECT `name` FROM `wp_regions` WHERE kod_mds = '".$region_id."' AND active=1 AND home=1";
     $region_name = $wpdb->get_var($qry2);
     echo $region_name;exit;
 }
@@ -1609,10 +1609,10 @@ function process_get_country() {
     }
     else $region_id = $_POST['data_id'];
     
-    $qry2 = "SELECT `parent` FROM `wp_regions` WHERE kod_mds = '".$region_id."' AND active=1";
+    $qry2 = "SELECT `parent` FROM `wp_regions` WHERE kod_mds = '".$region_id."' AND active=1 AND home=1";
     $country_id = $wpdb->get_var($qry2);
     
-    $qry3 = "SELECT `kod_mds` FROM `wp_regions` WHERE id = '".$country_id."' AND active=1";
+    $qry3 = "SELECT `kod_mds` FROM `wp_regions` WHERE id = '".$country_id."' AND active=1 AND home=1";
     $country_kod = $wpdb->get_var($qry3);
     echo $country_kod;exit;
 }
@@ -1630,10 +1630,10 @@ function process_get_cities() {
     $cities_checked = array_unique($cities_checked);
     
     foreach($list as $ll) {
-        $qry = "SELECT `id`, `name` FROM `wp_regions` WHERE kod_mds = '".$ll."' AND active=1";
+        $qry = "SELECT `id`, `name` FROM `wp_regions` WHERE kod_mds = '".$ll."' AND active=1 AND home=1";
         $country = $wpdb->get_row($qry);
     
-        $qry2 = "SELECT `id`, `name`, `kod_mds` FROM `wp_regions` WHERE parent<>0 AND parent = '".$country->id."' AND active=1";
+        $qry2 = "SELECT `id`, `name`, `kod_mds` FROM `wp_regions` WHERE parent<>0 AND parent = '".$country->id."' AND active=1 AND home=1";
         $regions = $wpdb->get_results($qry2);
         if(!empty($regions)) {
             echo '<li class="area"> '.$country->name.'<span class="txt">regiony</span>';
