@@ -3,11 +3,27 @@
 ?> 
 
 <?php include('header.php'); 
+
+$oferta = get_query_var('oferta');
+
+if(empty($oferta)) {
+    $post_id = get_the_ID();
+    $post = get_post($post_id);
+    $xCode = $post->post_name;
+    
+    $par_adt = 2;
+    $par_chd = 0;
+    $oferta_data = get_data('offers', array('par_adt' => $par_adt, 'par_chd' => $par_chd, 'obj_xCode' => $xCode,
+    'obj_code' => $code));
+
+    $oferta = $oferta_data->ofr[0]->{'@attributes'}->id;
+}
+
 $par_adt = (int) get_query_var('par_adt', 2);
 $par_chd = (int) get_query_var('par_chd', 0);
-$data = get_data('details', array('ofr_id' => get_query_var('oferta'), 'ofr_TFGincluded' => 1));
+$data = get_data('details', array('ofr_id' => $oferta, 'ofr_TFGincluded' => 1));
 $ofr = $data->ofr;
-$data_price = get_data('details', array('ofr_id' => get_query_var('oferta'), 'par_adt' => $par_adt, 'par_chd' => $par_chd, 'totalPrice' => 1));
+$data_price = get_data('details', array('ofr_id' => $oferta, 'par_adt' => $par_adt, 'par_chd' => $par_chd, 'totalPrice' => 1));
 
 $offers = $offers_pom = array();
 $conditions = array( 
@@ -26,7 +42,7 @@ $conditions = array(
     'trp_depCode' => $ofr->trp->{'@attributes'}->depCode    
 );  
 
-$conditions2 = array('ofr_id' => get_query_var('oferta'), 'par_adt' => $par_adt);
+$conditions2 = array('ofr_id' => $oferta, 'par_adt' => $par_adt);
 $data_pr = get_data('details', $conditions2, 'ofr_price,ofr_TFGIncluded');
 $tfg = $data_pr->ofr->{'@attributes'}->TFGIncluded;
 
@@ -76,7 +92,7 @@ if(!empty($data2) && $data2->count>0) {
     if($data2->count==1) $data2->ofr = array($data2->ofr);
     $xServiceId = $xRoomTypes = $depDesc = array();
     foreach($data2->ofr as $dt) {
-        if($dt->{'@attributes'}->id==get_query_var('oferta')) {
+        if($dt->{'@attributes'}->id==$oferta) {
             $xRoomTypes[] = $dt->obj->{'@attributes'}->xRoomDesc;
             $offers[$dt->{'@attributes'}->id] = $dt->obj->{'@attributes'}->roomDesc;
             $depDesc[$dt->{'@attributes'}->id] = $dt->trp->{'@attributes'}->depName;
@@ -174,20 +190,19 @@ $sum = $ofr->{'@attributes'}->price*(int)get_query_var('par_adt', 2) + $ofr->{'@
 				</div>
 
 				<div class="hanging-hld">
-	                <input type="hidden" id="offer_id" value="<?=get_query_var('oferta');?>" />
+	                <input type="hidden" id="offer_id" value="<?=$oferta;?>" />
                         <?php
                         //sprawdzanie czy jest w schowku
                         global $wpdb;
-                        $oferta = get_query_var('oferta');
                         $qry = "SELECT ho.offer_id FROM wp_hanging h
                                 JOIN wp_hanging_offers ho ON h.id = ho.hanging_id
                                 WHERE h.code='{$_COOKIE['hanging_code']}' AND ho.offer_id='{$oferta}'";
                         $results = $wpdb->get_results( $qry );
                         if(empty($results)) {?>
-					<div class="hanging-btn-hld"><a href="<?php echo admin_url('admin-ajax.php'); ?>" id="add_to_hanging" class="add_to_hanging add-to-hanging" data-offer-id="<?=get_query_var('oferta');?>"><i class="icon-like"></i> Dodaj do ulubionych</a></div>
+					<div class="hanging-btn-hld"><a href="<?php echo admin_url('admin-ajax.php'); ?>" id="add_to_hanging" class="add_to_hanging add-to-hanging" data-offer-id="<?=$oferta;?>"><i class="icon-like"></i> Dodaj do ulubionych</a></div>
                         <?php }
                         else {?>
-                               <div class="hanging-btn-hld"><a href="<?php echo admin_url('admin-ajax.php'); ?>" class="remove-from-hanging" data-offer-id="<?=get_query_var('oferta');?>">Usuń z ulubionych</a></div>
+                               <div class="hanging-btn-hld"><a href="<?php echo admin_url('admin-ajax.php'); ?>" class="remove-from-hanging" data-offer-id="<?=$oferta;?>">Usuń z ulubionych</a></div>
                         <?php }?>
                                 </div>
 			</div>
@@ -492,7 +507,7 @@ $sum = $ofr->{'@attributes'}->price*(int)get_query_var('par_adt', 2) + $ofr->{'@
 										<select name="room" id="room" class="mobile-preventd">
 		                                    <?php
 		                                    foreach($offers as $key=>$offer) {?>
-		                                    <option value="<?=$key;?>" <?=($key==get_query_var('oferta'))?'selected':'';?>><?=$offer;?></option>
+		                                    <option value="<?=$key;?>" <?=($key==$oferta)?'selected':'';?>><?=$offer;?></option>
 		                                    <?php }?>
 										</select>
 									</div>
@@ -508,7 +523,7 @@ $sum = $ofr->{'@attributes'}->price*(int)get_query_var('par_adt', 2) + $ofr->{'@
 										<select name="dep" id="dep" class="mobile-preventd">
 											<?php
 		                                    foreach($depDesc as $key=>$offer) {?>
-		                                    <option value="<?=$key;?>" <?=($key==get_query_var('oferta'))?'selected':'';?>><?=$offer;?></option>
+		                                    <option value="<?=$key;?>" <?=($key==$oferta)?'selected':'';?>><?=$offer;?></option>
 		                                    <?php }?>
 										</select>
 									</div>
@@ -568,9 +583,9 @@ $sum = $ofr->{'@attributes'}->price*(int)get_query_var('par_adt', 2) + $ofr->{'@
 		                                    <?php
 		                                        if(!empty($services)) {
 		                                    foreach($services as $key=>$offer) {?>
-		                                    <option value="<?=$key;?>" <?=($key==get_query_var('oferta'))?'selected':'';?>><?=$offer;?></option>
+		                                    <option value="<?=$key;?>" <?=($key==$oferta)?'selected':'';?>><?=$offer;?></option>
 		                                    <?php }}
-		                                        else {?><option value="<?=get_query_var('oferta');?>">Bez wyżywienia (RO)</option><?php }?>
+		                                        else {?><option value="<?=$oferta;?>">Bez wyżywienia (RO)</option><?php }?>
 										</select>
 									</div>
 								</div>
@@ -818,7 +833,7 @@ $depDesc_popup = array_unique($depDesc_popup);
 				                    <option value="0">Wybierz</option>
                                     <?php
                                     foreach($depDesc_popup as $key=>$offer) {?>
-                                    <option value="<?=$key;?>" <?=($key==get_query_var('oferta'))?'selected':'';?>><?=$offer;?></option>
+                                    <option value="<?=$key;?>" <?=($key==$oferta)?'selected':'';?>><?=$offer;?></option>
                                     <?php }?>
 				                </select>
 				            </div>
