@@ -1745,6 +1745,9 @@ add_action('wp_ajax_nopriv_search_in_all', 'process_search_in_all');
 function process_search_in_all() {
     global $wpdb;
     $search = $_POST['val'];
+	
+    $trip_id = $_POST['trip_id'];
+    $kierunek = explode(',', get_field('kierunek', $trip_id));
     
     $kraje = $regiony = $miasta = "";
     
@@ -1754,6 +1757,7 @@ function process_search_in_all() {
     if(!empty($countries)) {
         $kraje .= "<ul><legend>Kraje</legend>";
         foreach($countries as $count) {
+	    if(!empty($trip_id) && !in_array($count->kod_mds, $kierunek)) continue;
             $kraje .= "<li class='search_item' data-type='country' data-name='".$count->name."' data-id='".$count->kod_mds."'>".$count->name."</li>";
         }
         $kraje .= "</ul>";
@@ -1765,6 +1769,7 @@ function process_search_in_all() {
     if(!empty($regions)) {
         $regiony .= "<ul><legend>Regiony</legend>";
         foreach($regions as $count) {
+	    if(!empty($trip_id) && !in_array($count->kod_mds, $kierunek)) continue;
             $regiony .= "<li class='search_item' data-type='region' data-name='".$count->name."' data-id='".$count->kod_mds."'>".$count->name."</a></li>";
         }
         $regiony .= "</ul>";
