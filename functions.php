@@ -1629,15 +1629,22 @@ function process_get_cities() {
     $cities_checked = explode(',', $_POST['cities_checked']);
     $cities_checked = array_unique($cities_checked);
     
+    $trip_id = $_POST['trip_id'];
+    $kierunek = explode(',', get_field('kierunek', $trip_id));
+    
     foreach($list as $ll) {
+        if(!empty($trip_id) && !in_array($ll, $kierunek)) continue;
+        
         $qry = "SELECT `id`, `name` FROM `wp_regions` WHERE kod_mds = '".$ll."' AND active=1 AND home=1";
         $country = $wpdb->get_row($qry);
-    
+
         $qry2 = "SELECT `id`, `name`, `kod_mds` FROM `wp_regions` WHERE parent<>0 AND parent = '".$country->id."' AND active=1 AND home=1";
         $regions = $wpdb->get_results($qry2);
         if(!empty($regions)) {
             echo '<li class="area"> '.$country->name.'<span class="txt">regiony</span>';
             foreach($regions as $reg) {
+                if(!empty($trip_id) && !in_array($reg->kod_mds, $kierunek)) continue;
+		    
                 if(!empty($reg->name)) {
                     $reg_checked = (in_array($reg->kod_mds, $regions_checked)) ? ' checked' : '';
                     echo '<ul class="ul-regions"><li><label><input class="region" type="checkbox" value="'.$reg->kod_mds.'" data-region-name="'.$reg->name.'" data-region-id="'.$reg->kod_mds.'"'.$reg_checked.'> '.$reg->name.'</label> ';
