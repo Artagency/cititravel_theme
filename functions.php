@@ -816,7 +816,7 @@
                             foreach($array->hotelData->texts->text as $txt) {
                                 if(!empty($txt->content)) {
                                     if(!is_object($txt->subject) && !is_object($txt->content)) {
-                                        $new_text .= (string)$txt->subject.'|||'.(string)$txt->content.'<br/><br/>';
+                                        $new_text .= (string)$txt->subject.'|||'.(string)$txt->content.'|-|-|';
                                     }
                                 }
                             }
