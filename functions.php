@@ -1040,6 +1040,24 @@
             'calc_found' => 500,
             'order_by' => $orderby);
         
+	if(!empty($kierunek)) {
+            $trp_tab = explode(',', $kierunek);
+            $countries = $regions = $new_countries = array();
+            foreach($trp_tab as $tt) {
+                if(strpos($tt, '_')===false) $countries[] = $tt;
+                else $regions[] = $tt;
+            }
+            
+            foreach($regions as $reg) {
+                $reg_tab = explode('_', $reg);
+                if(in_array((int)$reg_tab[0].':', $countries)) $new_countries[] = (int)$reg_tab[0].':';
+            }
+            
+            $new_countries = array_diff($countries, $new_countries);
+            $new_trp = array_merge($regions, $new_countries);
+            $kierunek = join(',', $new_trp);
+        }    
+	    
         if(!empty($kierunek)) $conditions['trp_destination'] = $kierunek;
       
         if(!empty($ofr_type)) $conditions['ofr_type'] = join(',', $ofr_type); 
