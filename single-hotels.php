@@ -255,8 +255,8 @@ $sum = $ofr->{'@attributes'}->price*(int)get_query_var('par_adt', 2) + $ofr->{'@
                                                                 <table>
                                                                     <tr><td>
                                                                 <?php
-                                                                $content = preg_replace("/<br\W*?\/><br\W*?\/>/", "</td></tr><tr><td>", $content);
-                                                                echo str_replace(array('|||'), 
+                                                                	$content = str_replace("|-|-|", "</td></tr><tr><td>", $content);
+									echo str_replace(array('|||'), 
                                                                         array('</td><td>'), $content);
                                                                 ?>
                                                                         </td></tr>
