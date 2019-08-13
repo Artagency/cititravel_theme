@@ -205,12 +205,15 @@ foreach($kierunek as $kier) {
                             -->
                             <h3>Najpopularniejsze</h3>
 
-                            <?php foreach($kraje_popularne as $kraj) {?>
+                            <?php foreach($kraje_popularne as $kraj) {
+                                if($post_type=='conditions' && !in_array($kraj->kod_mds, $kierunek)) continue;?>
                             <label><input class="country" type="checkbox" value="<?=$kraj->kod_mds;?>" data-country-name="<?=$kraj->name;?>" <?=(in_array($kraj->kod_mds, $dest_tab))?'checked':'';?>> <?=$kraj->name;?></label>
                             <?php }?>
 
                             <h3>Alfabetycznie</h3>
-                            <?php foreach($kraje as $kraj) {?>
+                            <?php foreach($kraje as $kraj) {
+                                if($post_type=='conditions' && !in_array($kraj->kod_mds, $kierunek)) continue;
+                                ?>
                             <label><input class="country" type="checkbox" value="<?=$kraj->kod_mds;?>" data-country-name="<?=$kraj->name;?>" <?=(in_array($kraj->kod_mds, $dest_tab))?'checked':'';?>> <?=$kraj->name;?></label>
                             <?php }?>
                         </div>
@@ -218,7 +221,7 @@ foreach($kierunek as $kier) {
                         <div class="col-lg-6 col-md-6 col-xs-6 regions-col">
                             <h3>Kraje, regiony</h3>
 
-                            <ul class="regions-list" data-href="<?php echo admin_url('admin-ajax.php'); ?>">
+                            <ul class="regions-list" data-trip-id="<?=($post_type=='conditions')?$trip_id:0;?>" data-href="<?php echo admin_url('admin-ajax.php'); ?>">
                                 
                             </ul>                                
                         </div>
