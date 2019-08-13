@@ -186,7 +186,7 @@ foreach($kierunek as $kier) {
 
             <div class="trip-direction-container">
                 <div class="trip-direction-container-top">
-                    <input type="text" class="trips-input" placeholder="Wpisz kraj, region lub miejscowość" value="" data-href="<?php echo admin_url('admin-ajax.php'); ?>" />
+                    <input type="text" class="trips-input" placeholder="Wpisz kraj, region lub miejscowość" value="" data-href="<?php echo admin_url('admin-ajax.php'); ?>" data-trip-id="<?=($post_type=='conditions')?$trip_id:0;?>" />
                     <br/>
                     <ul class="actual-choice-list">
                     </ul>
