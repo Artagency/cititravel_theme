@@ -13,10 +13,8 @@ if(empty($oferta)) {
     
     $par_adt = 2;
     $par_chd = 0;
-    $oferta_data = get_data('offers', array('par_adt' => $par_adt, 'par_chd' => $par_chd, 'obj_xCode' => $xCode,
-    'obj_code' => $code));
-
-    $oferta = $oferta_data->ofr[0]->{'@attributes'}->id;
+    $oferta_data = get_data('offers', array('par_adt' => $par_adt, 'par_chd' => $par_chd, 'obj_xCode' => $xCode));
+    if($oferta_data->count > 0) $oferta = $oferta_data->ofr[0]->{'@attributes'}->id;
 }
 
 $par_adt = (int) get_query_var('par_adt', 2);
