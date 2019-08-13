@@ -1755,24 +1755,30 @@ function process_search_in_all() {
     $countries = $wpdb->get_results($qry);
         
     if(!empty($countries)) {
+        $c=0;
         $kraje .= "<ul><legend>Kraje</legend>";
         foreach($countries as $count) {
 	    if(!empty($trip_id) && !in_array($count->kod_mds, $kierunek)) continue;
+            $c++;
             $kraje .= "<li class='search_item' data-type='country' data-name='".$count->name."' data-id='".$count->kod_mds."'>".$count->name."</li>";
         }
         $kraje .= "</ul>";
+        if($c==0) $kraje = '';
     }
     
     $qry = "SELECT `kod_mds`, `name` FROM `wp_regions` WHERE name LIKE '%".$search."%' AND active=1 AND home=1 AND parent<>0 GROUP BY `name`";
     $regions = $wpdb->get_results($qry);
     
     if(!empty($regions)) {
+        $r=0;
         $regiony .= "<ul><legend>Regiony</legend>";
         foreach($regions as $count) {
 	    if(!empty($trip_id) && !in_array($count->kod_mds, $kierunek)) continue;
+            $r++;
             $regiony .= "<li class='search_item' data-type='region' data-name='".$count->name."' data-id='".$count->kod_mds."'>".$count->name."</a></li>";
         }
         $regiony .= "</ul>";
+        if($r==0) $regiony = '';
     }
     
     $qry = "SELECT `id`, `name` FROM `wp_cities` WHERE name LIKE '%".$search."%' AND active=1 AND parent_id<>0 GROUP BY `name`";
