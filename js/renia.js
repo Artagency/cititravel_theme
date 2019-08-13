@@ -396,7 +396,7 @@
     function get_cities(checked_tab, regions_checked) {
         $.ajax({
             url: $('.regions-list').attr('data-href'),
-            data: {action: 'get_cities', list: checked_tab.join(','), regions_checked: regions_checked.join(','), cities_checked: jQuery('#cities').val()},
+            data: {action: 'get_cities', list: checked_tab.join(','), regions_checked: regions_checked.join(','), cities_checked: jQuery('#cities').val(), trip_id: $('.regions-list').attr('data-trip-id')},
             type: 'post',
             success: function(result) {
                 $('.regions-list').empty().append(result);
@@ -525,7 +525,7 @@
         var input = $(this);
         $.ajax({
             url: $('.trips-input').attr('data-href'),
-            data: {action: 'search_in_all', val: input.val()},
+            data: {action: 'search_in_all', val: input.val(), trip_id: $('.trips-input').attr('data-trip-id')},
             type: 'post',
             success: function(result) {
                 $('.destinations-search').empty().append(result);
