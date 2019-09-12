@@ -1653,7 +1653,7 @@ function process_get_cities() {
     foreach($list as $ll) {
         if(!empty($trip_id) && !in_array($ll, $kierunek)) continue;
         
-        $qry = "SELECT `id`, `name` FROM `wp_regions` WHERE kod_mds = '".$ll."' AND active=1 AND home=1";
+        $qry = "SELECT `id`, `name`, kod_mds FROM `wp_regions` WHERE kod_mds = '".$ll."' AND active=1 AND home=1";
         $country = $wpdb->get_row($qry);
 
         $qry2 = "SELECT `id`, `name`, `kod_mds` FROM `wp_regions` WHERE parent<>0 AND parent = '".$country->id."' AND active=1 AND home=1";
@@ -1665,7 +1665,7 @@ function process_get_cities() {
 		    
                 if(!empty($reg->name)) {
                     $reg_checked = (in_array($reg->kod_mds, $regions_checked)) ? ' checked' : '';
-                    echo '<ul class="ul-regions"><li><label><input class="region" type="checkbox" value="'.$reg->kod_mds.'" data-region-name="'.$reg->name.'" data-region-id="'.$reg->kod_mds.'"'.$reg_checked.'> '.$reg->name.'</label> ';
+                    echo '<ul class="ul-regions" data-country-id="'.$country->kod_mds.'"><li><label><input class="region" type="checkbox" value="'.$reg->kod_mds.'" data-region-name="'.$reg->name.'" data-region-id="'.$reg->kod_mds.'"'.$reg_checked.'> '.$reg->name.'</label> ';
                     $qry3 = "SELECT `id`, `name` FROM `wp_cities` WHERE name<>'".$reg->name."' AND parent_id<>0 AND parent_kod_mds = '".$reg->kod_mds."' AND active=1";
                     $cities = $wpdb->get_results($qry3);
                     if(!empty($cities)) {
@@ -1698,8 +1698,10 @@ function process_get_cities() {
                 checkboxClass: 'icheckbox_square-blue',
                 increaseArea: '20%',
         });
-        $('.country, .region, .city').on('ifUnchecked', function() {
+        $('.destinations .country, .destinations .region, .destinations .city').on('ifUnchecked', function() {
+        var slug = $(this).val().replace(':', '_');
             $('.del-item[data-id=\"'+$(this).val()+'\"]').parent().remove();
+            $('.del-item[data-id^=\"'+slug+'\"]').parent().remove();
             if($(this).hasClass('country')) {
                 name = $(this).attr('data-country-name');
             }
@@ -1727,20 +1729,21 @@ function process_get_cities() {
                 }
                 
             var checked_tab_region = [];
-                $.each($('.region'), function() {
-                    if($(this).is(':checked')) {
+                $.each($('.regions-col .region'), function() {
+                    if($(this).is(':visible') && $(this).is(':checked')) {
                         checked_tab_region.push($(this).val());
                     } 
                 });    
+                
                 var checked_tab_city = [];
-                $.each($('.city'), function() {
-                    if($(this).is(':checked')) {
+                $.each($('.destinations .city'), function() {
+                    if($(this).is(':visible') && $(this).is(':checked')) {
                         checked_tab_city.push($(this).val());
                     } 
                 });   
                 var checked_tab_region = checked_tab_region.filter((v, i, a) => a.indexOf(v) === i); 
                 for(var i in checked_tab_region) {
-                    var country_name = $('input.region[value=\"'+checked_tab_region[i]+'\"]').attr('data-region-name');
+                    var country_name = $('input.region[value=\"'+checked_tab_region[i]+'\"]:visible').attr('data-region-name');
                     var data_id = $('.actual-choice-list').find('span.del-item[data-id=\"'+checked_tab_region[i]+'\"]').attr('data-id');
                     if(country_name!='' && data_id==undefined)
                         $('.actual-choice-list').append('<li><span class=\"del-item\" data-type=\"region\" data-name=\"'+country_name+'\" data-id=\"'+checked_tab_region[i]+'\">'+country_name+' <span class=\"icon-delete\"></span></span></li>').show();               
