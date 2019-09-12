@@ -352,7 +352,7 @@
                 regions_checked.push($(this).val())
             }    
         });
-        
+
         var all_checked = ($('#all_checked').val()!='') ? $('#all_checked').val().split(',') : [];
         for(var i in checked_tab) {
             var country_name = $('input.country[value="'+checked_tab[i]+'"]').attr('data-country-name');
@@ -452,7 +452,7 @@
                 regions_checked.push($(this).attr('data-region-id'));
             } 
         });   
-        
+
         $('#regions').val(regions_checked.join(','));
         
         var all_checked = ($('#all_checked').val()!='') ? $('#all_checked').val().split(',') : [];
@@ -475,8 +475,8 @@
             if($(this).is(':checked')) {
                 checked_tab.push($(this).attr('data-city-id'));
             } 
-        });    
-        
+        });  
+
         var all_checked = ($('#all_checked').val()!='') ? $('#all_checked').val().split(',') : [];
         for(var i in checked_tab) {
             var country_name = $('input.city[value="'+checked_tab[i]+'"]').attr('data-city-name');
