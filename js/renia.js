@@ -577,7 +577,7 @@
         $('input.region[data-region-name="'+data_name+'"]').iCheck('uncheck'); 
         $('input.city[value="'+data_id+'"]').iCheck('uncheck'); 
         $('input.city[data-city-name="'+data_name+'"]').iCheck('uncheck'); 
-        if(!$(this).parents('.trip-direction-container-top').length || !$(this).parents('.input-hld').length) {
+        if(!$(this).parents('.trip-direction-container-top').length && $(this).parent().hasClass('input-hld') == false) {
           $(this).parent().parent().remove();
         }
         if($('.actual-choice-list').html()=='') $('.actual-choice-list').hide();
