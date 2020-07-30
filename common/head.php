@@ -55,7 +55,6 @@
 
 <?php if(!is_mobile()): ?>
 <script src="//code.tidio.co/urcenbqebocqeskmmfwcrmt7mjl3te0h.js"></script>
-<script type="text/javascript">var _sscp_id = "5af94041b7afa";(function() {var s = document.createElement('script');s.type = 'text/javascript';s.src = "https://widget.contactleader.pl/f/" + _sscp_id + "/cl.js";s.async = true;document.getElementsByTagName('head')[0].appendChild(s);})();</script>
 <?php endif; ?>
 
 <!-- Global site tag (gtag.js) - Google Ads: 752314411 -->
@@ -97,6 +96,8 @@
 
 <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<meta name="google-site-verification" content="pbf6Tl2GResG9zJkaIu7pfoP12InIBOWG0e5Dbkv2UI" />
 
 <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>">
 
